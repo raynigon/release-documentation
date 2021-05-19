@@ -1,0 +1,14 @@
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    name: "test"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+      - uses: raynigon/release-documentation@main
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          latest: "0.0.2"
