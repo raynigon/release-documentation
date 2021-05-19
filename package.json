@@ -4,7 +4,8 @@
   "description": "GitHub Action to create a release documentation from the repository PRs",
   "main": "out/index.js",
   "scripts": {
-    "build": "npx ncc build src/index.ts -o out",
+    "build": "npx ncc build src/index.ts -m -o out",
+    "watch": "npx ncc build src/index.ts -m -w -o out",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

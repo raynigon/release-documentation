@@ -30,7 +30,7 @@ async function main() {
     core.info("List Pull Requests")
     const prIds = await listPRs(previousTag, latestTag);
     core.info("Create Template Context")
-    const context = createTemplateContext(token, prIds);
+    const context = await createTemplateContext(token, prIds);
     // Parse Template
     core.info("Render Template")
     const content = renderTemplate(template, context);
