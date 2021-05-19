@@ -12,7 +12,7 @@ async function getPreviousTag(currentTag: string): Promise<string> {
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     const outputStream = new WritableStream();
     await exec("bash", ["-c", "git tag --sort=-creatordate | grep -A 1 second | tail -n 1"], { outStream: outputStream })
-    return outputStream.toString().split("\n").map(line => line.replace("#", ""))
+    return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it=>it!="")
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
