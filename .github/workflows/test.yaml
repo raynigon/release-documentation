@@ -1,0 +1,6 @@
+jobs:
+  steps:
+    - uses: raynigon/release-documentation@main
+      with:
+        token: "${{ secrets.GITHUB_TOKEN }}"
+        latest: "0.0.2"

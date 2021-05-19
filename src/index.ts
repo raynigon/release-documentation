@@ -1,7 +1,8 @@
+import * as stream from 'stream';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { exec } from '@actions/exec'
-import * as stream from 'stream';
+import { exec } from '@actions/exec';
+import { createTemplateContext } from './pull_requests';
 
 function streamToString(stream: stream): Promise<string> {
     const chunks: any[] = [];
@@ -19,13 +20,12 @@ async function getPreviousTag(currentTag: string): Promise<string> {
     return resultPromise
 }
 
-function listPRs(tag1: string, tag2: string): Array<string> {
-    return []
-}
-
-async function createTemplateContext(token: string, prs: Array<string>): Promise<any> {
-    const oktokit = github.getOctokit(token);
-    return null;
+async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
+    const outputStream = new stream.Writable();
+    const resultPromise = streamToString(outputStream);
+    exec("bash", ["-c", "git tag --sort=-creatordate | grep -A 1 second | tail -n 1"], { outStream: outputStream })
+    const stdout = await resultPromise
+    return stdout.split("\n").map(line => line.replace("#", ""))
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
@@ -39,7 +39,7 @@ async function main() {
     const template = core.getInput('template');
     // Calculated Values
     const previousTag = await getPreviousTag(latestTag);
-    const prIds = listPRs(previousTag, latestTag);
+    const prIds = await listPRs(previousTag, latestTag);
     const context = createTemplateContext(token, prIds);
     // Parse Template
     const content = renderTemplate(template, context);
