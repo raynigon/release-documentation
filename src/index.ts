@@ -26,6 +26,10 @@ function execOptions(): ExecOptions & ExecReturnOptions {
     return options
 }
 
+function notNull<TValue>(value: TValue | null): value is TValue {
+    return value !== null && value !== undefined;
+}
+
 async function getPreviousTag(currentTag: string): Promise<string> {
     core.debug(`Find previous tag for: ${currentTag}`)
     const options = execOptions()
@@ -45,7 +49,12 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     }
     const options = execOptions()
     await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], options)
-    return options.stdout().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
+    const prPattern = new RegExp('Merge pull request #([0-9]{1,}) .*', 'g');
+    return options.stdout()
+        .split("\n")
+        .map(line => prPattern.exec(line))
+        .filter(notNull)
+        .map(it => it[1])
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
