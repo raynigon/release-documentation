@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { exec, ExecOptions } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
-import * as Mustache from 'mustache';
+import Mustache from 'mustache';
 
 interface ExecReturnOptions {
     stdout(): string
