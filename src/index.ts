@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { exec, ExecOptions } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
+import * as Mustache from 'mustache';
 
 interface ExecReturnOptions {
     stdout(): string
@@ -60,7 +61,7 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
-    return template
+    return Mustache.render(template, context);
 }
 
 async function main() {

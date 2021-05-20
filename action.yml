@@ -13,21 +13,21 @@ inputs:
     default: |
       # What's Changed
       ## 🚀 Features & Enhancements
-      {% for item in pull_requests["features"] %}
-      * {{ item }}
-      {% endfor %}
+      {{#pull_requests.features}}
+      * {{ title }} PR: #{{ number }}
+      {{/pull_requests.features}}
       ## 📖 Documentation
-      {% for item in pull_requests["documentation"] %}
-      * {{ item }}
-      {% endfor %}
+      {{#pull_requests.documentation}}
+      * {{ title }} PR: #{{ number }}
+      {{/pull_requests.documentation}}
       ## 🧹 Housekeeping
-      {% for item in pull_requests["housekeeping"] %}
-      * {{ item }}
-      {% endfor %}
+      {{#pull_requests.housekeeping}}
+      * {{ title }} PR: #{{ number }}
+      {{/pull_requests.housekeeping}}
       ## 📦 Dependency updates
-      {% for item in pull_requests["dependencies"] %}
-      * {{ item }}
-      {% endfor %}
+      {{#pull_requests.dependencies}}
+      * {{ title }} PR: #{{ number }}
+      {{/pull_requests.dependencies}}
 outputs:
   content:
     description: 'The parsed template filled with PRs'

@@ -11,7 +11,9 @@ jobs:
         with:
           fetch-depth: 0
       - run: "git tag --sort=-creatordate"
-      - uses: raynigon/release-documentation@main
+      - id: "hello"
+        uses: raynigon/release-documentation@main
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           latest: "0.0.3"
+      - run: "echo '${{ steps.hello.outputs.content }}'"

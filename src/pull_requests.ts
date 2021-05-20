@@ -8,6 +8,7 @@ async function fetchPullRequest(token: string, pr: string): Promise<any> {
         repository(owner: "${github.context.repo.owner}", name: "${github.context.repo.repo}") {
             pullRequest(number: ${pr}) {
                 id,
+                number,
                 title,
                 labels(first: 100) {
                   edges {
@@ -24,6 +25,7 @@ async function fetchPullRequest(token: string, pr: string): Promise<any> {
   const pullRequest = response["repository"]["pullRequest"]
   return {
     "id": pullRequest["id"],
+    "number": pullRequest["number"],
     "title": pullRequest["title"],
     "labels": (pullRequest["labels"]["edges"] as Array<any>).map(it => it["node"]["name"])
   }
