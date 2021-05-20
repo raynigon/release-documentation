@@ -11,6 +11,7 @@ async function getPreviousTag(currentTag: string): Promise<string> {
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     const outputStream = new WritableStream();
+    core.info(`List Pull Requests ${tag1}..${tag2}`)
     await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], { outStream: outputStream })
     return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
 }
@@ -25,11 +26,8 @@ async function main() {
     const latestTag = core.getInput('latest');
     const template = core.getInput('template');
     // Calculated Values
-    core.info("Calculating previous Tag")
     const previousTag = await getPreviousTag(latestTag);
-    core.info("List Pull Requests")
     const prIds = await listPRs(previousTag, latestTag);
-    core.info("Create Template Context")
     const context = await createTemplateContext(token, prIds);
     // Parse Template
     core.info("Render Template")
