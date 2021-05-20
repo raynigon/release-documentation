@@ -60,7 +60,7 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     return prs
 }
 
-async function renderTemplate(template: string, context: any): Promise<string> {
+function renderTemplate(template: string, context: any): string {
     return Mustache.render(template, context);
 }
 
@@ -75,7 +75,7 @@ async function main() {
     const context = await createTemplateContext(token, prIds);
     // Parse Template
     core.debug("Render Template")
-    const content = renderTemplate(template, context);
+    const content: string = renderTemplate(template, context);
     core.setOutput("content", content);
     return null;
 }
