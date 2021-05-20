@@ -2,12 +2,12 @@ import * as core from '@actions/core';
 import { exec, ExecOptions } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
 
-interface ExecReturnOptions{
+interface ExecReturnOptions {
     stdout(): string
     stderr(): string
 }
 
-function execOptions(): ExecOptions & ExecReturnOptions {
+function execOptions(): ExecOptions & ExecReturnOptions {
     let myOutput = '';
     let myError = '';
 
@@ -27,16 +27,19 @@ function execOptions(): ExecOptions & ExecReturnOptions {
 }
 
 async function getPreviousTag(currentTag: string): Promise<string> {
-    core.info(`Find previous tag for: ${currentTag}`)
-    await exec("git", ["fetch"])
+    core.debug(`Find previous tag for: ${currentTag}`)
     const options = execOptions()
     await exec("git", ["tag", "--sort=-creatordate"], options)
-    core.info(`Git stdout: ${options.stdout()}`)
-    return options.stdout()
+    const tags = options.stdout().split("\n")
+    core.debug(`Found tags: ${tags}`)
+    const currentIndex = tags.findIndex(it => it == currentTag)
+    if (tags.length < (currentIndex + 1))
+        return ""
+    return tags[currentIndex + 1]
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
-    core.info(`List Pull Requests for range ${tag1}..${tag2}`)
+    core.debug(`List Pull Requests for range ${tag1}..${tag2}`)
     if (tag1 == "" || tag2 == "") {
         return []
     }
@@ -59,7 +62,7 @@ async function main() {
     const prIds = await listPRs(previousTag, latestTag);
     const context = await createTemplateContext(token, prIds);
     // Parse Template
-    core.info("Render Template")
+    core.debug("Render Template")
     const content = renderTemplate(template, context);
     core.setOutput("content", content);
     return null;
