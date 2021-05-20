@@ -27,16 +27,14 @@ function execOptions(): ExecOptions & ExecReturnOptions {
 }
 
 async function getPreviousTag(currentTag: string): Promise<string> {
-    core.info(`Git tags sort currentTag: ${currentTag}`)
+    core.info(`Find previous tag for: ${currentTag}`)
     const options = execOptions()
-    const returnCode = await exec("git", ["tag", "--sort=-creatordate"], options)
-    const result = options.stdout()
-    core.info(`Return Code: ${returnCode}\t${result}`)
-    return result
+    await exec("git", ["tag", "--sort=-creatordate"], options)
+    return options.stdout()
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
-    core.info(`List Pull Requests ${tag1}..${tag2}`)
+    core.info(`List Pull Requests for range ${tag1}..${tag2}`)
     if (tag1 == "" || tag2 == "") {
         return []
     }
