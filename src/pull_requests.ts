@@ -20,7 +20,7 @@ async function fetchPullRequest(token: string, pr: string): Promise<any> {
             }
         }
       }`)
-  core.info(`received ${pr}: ${response}`);
+  core.info(`received ${pr}: ${JSON.stringify(response)}`);
   return {
     "id": response["data"]["repository"]["id"],
     "title": response["data"]["repository"]["title"],
