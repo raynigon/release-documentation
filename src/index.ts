@@ -1,30 +1,48 @@
 import * as core from '@actions/core';
-import { exec } from '@actions/exec';
+import { exec, ExecOptions } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
-import { WritableStream } from 'memory-streams';
+
+interface ExecReturnOptions{
+    stdout(): string
+    stderr(): string
+}
+
+function execOptions(): ExecOptions & ExecReturnOptions {
+    let myOutput = '';
+    let myError = '';
+
+    const options = {
+        listeners: {
+            stdout: (data: Buffer) => {
+                myOutput += data.toString();
+            },
+            stderr: (data: Buffer) => {
+                myError += data.toString();
+            }
+        },
+        stdout: () => myOutput,
+        stderr: () => myOutput,
+    };
+    return options
+}
 
 async function getPreviousTag(currentTag: string): Promise<string> {
-    const outputStream = new WritableStream();
     core.info(`Git tags sort currentTag: ${currentTag}`)
-    try {
-        const returnCode = await exec("git", ["tag", "--sort=-creatordate"], { outStream: outputStream })
-        const result = outputStream.toString()
-        core.info(`Return Code: ${returnCode}\t${result}`)
-        return result
-    }catch(error){
-        core.info(error)
-        return ""
-    }
+    const options = execOptions()
+    const returnCode = await exec("git", ["tag", "--sort=-creatordate"], options)
+    const result = options.stdout()
+    core.info(`Return Code: ${returnCode}\t${result}`)
+    return result
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     core.info(`List Pull Requests ${tag1}..${tag2}`)
-    if (tag1 == "" || tag2 == ""){
+    if (tag1 == "" || tag2 == "") {
         return []
     }
-    const outputStream = new WritableStream();
-    await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], { outStream: outputStream })
-    return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
+    const options = execOptions()
+    await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], options)
+    return options.stdout().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
