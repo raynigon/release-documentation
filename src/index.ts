@@ -1,18 +1,18 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
-import {WritableStream} from 'memory-streams';
+import { WritableStream } from 'memory-streams';
 
 async function getPreviousTag(currentTag: string): Promise<string> {
     const outputStream = new WritableStream();
-    await exec("bash", ["-c", "\"git tag --sort=-creatordate | grep -A 1 second | tail -n 1\""], { outStream: outputStream })
+    await exec("git", ["tag", "--sort=-creatordate"], { outStream: outputStream })
     return outputStream.toString()
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     const outputStream = new WritableStream();
-    await exec("bash", ["-c", "\"git tag --sort=-creatordate | grep -A 1 second | tail -n 1\""], { outStream: outputStream })
-    return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it=>it!="")
+    await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], { outStream: outputStream })
+    return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
