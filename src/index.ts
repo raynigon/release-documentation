@@ -10,11 +10,11 @@ async function getPreviousTag(currentTag: string): Promise<string> {
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
+    core.info(`List Pull Requests ${tag1}..${tag2}`)
     if (tag1 == "" || tag2 == ""){
         return []
     }
     const outputStream = new WritableStream();
-    core.info(`List Pull Requests ${tag1}..${tag2}`)
     await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], { outStream: outputStream })
     return outputStream.toString().split("\n").map(line => line.replace("#", "").trim()).filter(it => it != "")
 }
