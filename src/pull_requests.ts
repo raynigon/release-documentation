@@ -21,10 +21,11 @@ async function fetchPullRequest(token: string, pr: string): Promise<any> {
         }
       }`)
   core.info(`received ${pr}: ${JSON.stringify(response)}`);
+  const pullRequest = response["repository"]["pullRequest"]
   return {
-    "id": response["data"]["repository"]["id"],
-    "title": response["data"]["repository"]["title"],
-    "labels": (response["data"]["repository"]["labels"]["edges"] as Array<any>).map(it => it["node"]["name"])
+    "id": pullRequest["id"],
+    "title": pullRequest["title"],
+    "labels": (pullRequest["labels"]["edges"] as Array<any>).map(it => it["node"]["name"])
   }
 }
 
