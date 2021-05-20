@@ -48,7 +48,7 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
         return []
     }
     const options = execOptions()
-    await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], options)
+    await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline"], options)
     const prPattern = new RegExp('Merge pull request #([0-9]{1,}) .*', 'g');
     const prs = options.stdout()
         .split("\n")
