@@ -6,10 +6,15 @@ import { WritableStream } from 'memory-streams';
 async function getPreviousTag(currentTag: string): Promise<string> {
     const outputStream = new WritableStream();
     core.info(`Git tags sort currentTag: ${currentTag}`)
-    const returnCode = await exec("git", ["tag", "--sort=-creatordate"], { outStream: outputStream })
-    const result = outputStream.toString()
-    core.info(`Return Code: ${returnCode}\t${result}`)
-    return result
+    try {
+        const returnCode = await exec("git", ["tag", "--sort=-creatordate"], { outStream: outputStream })
+        const result = outputStream.toString()
+        core.info(`Return Code: ${returnCode}\t${result}`)
+        return result
+    }catch(error){
+        core.info(error)
+        return ""
+    }
 }
 
 async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
