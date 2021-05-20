@@ -50,11 +50,13 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     const options = execOptions()
     await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline", "--grep='Merge pull request #'"], options)
     const prPattern = new RegExp('Merge pull request #([0-9]{1,}) .*', 'g');
-    return options.stdout()
+    const prs = options.stdout()
         .split("\n")
         .map(line => prPattern.exec(line))
         .filter(notNull)
         .map(it => it[1])
+    core.debug(`Found PRs: ${prs} with stdout: ${options.stdout()}`)
+    return prs
 }
 
 async function renderTemplate(template: string, context: any): Promise<string> {
