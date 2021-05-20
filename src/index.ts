@@ -28,8 +28,10 @@ function execOptions(): ExecOptions & ExecReturnOptions {
 
 async function getPreviousTag(currentTag: string): Promise<string> {
     core.info(`Find previous tag for: ${currentTag}`)
+    await exec("git", ["fetch"])
     const options = execOptions()
     await exec("git", ["tag", "--sort=-creatordate"], options)
+    core.info(`Git stdout: ${options.stdout()}`)
     return options.stdout()
 }
 
