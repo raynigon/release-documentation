@@ -50,18 +50,13 @@ async function listPRs(tag1: string, tag2: string): Promise<Array<string>> {
     }
     const options = execOptions()
     await exec("git", ["log", `${tag1}..${tag2}`, "--reverse", "--merges", "--oneline"], options)
-    const prPattern = new RegExp('.* Merge pull request #([0-9]{1,}) .*', 'g');
+    const prPattern = /.* Merge pull request #([0-9]{1,}) .*/is;
     const prs = options.stdout()
         .split("\n")
         .map(line => prPattern.exec(line))
         .filter(notNull)
         .map(it => it[1])
-    core.debug(`Found PRs: ${prs} with stdout: ${options.stdout()}`)
-    core.debug(`Step 0: ${options.stdout()}`)
-    core.debug(`Step 1: ${options.stdout().split("\n")}`)
-    core.debug(`Step 2: ${options.stdout().split("\n").map(line => prPattern.exec(line))}`)
-    core.debug(`Step 3: ${options.stdout().split("\n").map(line => prPattern.exec(line)).filter(notNull)}`)
-    core.debug(`Step 4: ${options.stdout().split("\n").map(line => prPattern.exec(line)).filter(notNull).map(it => it[1])}`)
+    core.debug(`Found PRs: ${prs} with stdout: ${options.stdout()}`);
     return prs
 }
 
