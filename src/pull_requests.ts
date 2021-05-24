@@ -10,7 +10,11 @@ interface PullRequest {
 }
 
 interface TemplateContext {
-  pull_requests: { [key: string]: Array<PullRequest> },
+  pull_requests: {
+    "_all": Array<PullRequest>,
+    "_no_label": Array<PullRequest>,
+    [key: string]: Array<PullRequest>
+  },
 }
 
 async function fetchPullRequest(token: string, pr: string): Promise<PullRequest> {
@@ -39,18 +43,19 @@ async function fetchPullRequest(token: string, pr: string): Promise<PullRequest>
     "id": pullRequest["id"],
     "number": pullRequest["number"],
     "title": pullRequest["title"],
-    "state": pullRequest["state"], 
+    "state": pullRequest["state"],
     "labels": (pullRequest["labels"]["edges"] as Array<any>).map(it => it["node"]["name"])
   }
 }
 
 export async function createTemplateContext(token: string, prs: Array<string>): Promise<any> {
   core.debug("Creating Template Context");
-  const pullRequests = (await Promise.all(prs.map(it => fetchPullRequest(token, it)))).filter(pr=>pr.state != "MERGED");
+  const pullRequests = (await Promise.all(prs.map(it => fetchPullRequest(token, it)))).filter(pr => pr.state != "MERGED");
   const labels = [...new Set(pullRequests.flatMap(it => it.labels))]
   const context: TemplateContext = {
     "pull_requests": {
-      "_all": pullRequests
+      "_all": pullRequests,
+      "_no_label": pullRequests.filter(it => it.labels.length === 0),
     }
   };
   labels.forEach(it => context.pull_requests[it] = [])
