@@ -6,6 +6,7 @@ interface PullRequest {
   number: number
   title: string,
   state: string,
+  author: string,
   labels: Array<string>
 }
 
@@ -26,6 +27,7 @@ async function fetchPullRequest(token: string, pr: string): Promise<PullRequest>
                 id,
                 number,
                 title,
+                author {login},
                 labels(first: 100) {
                   edges {
                     node {
@@ -44,6 +46,7 @@ async function fetchPullRequest(token: string, pr: string): Promise<PullRequest>
     "number": pullRequest["number"],
     "title": pullRequest["title"],
     "state": pullRequest["state"],
+    "author": pullRequest["author"]["login"],
     "labels": (pullRequest["labels"]["edges"] as Array<any>).map(it => it["node"]["name"])
   }
 }
