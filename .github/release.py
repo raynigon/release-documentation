@@ -5,13 +5,12 @@ def increment_version():
     with open("package.json") as file:
         package_json = json.load(file)
     version = package_json["version"]
-    print(version)
     parts = version.split(".")
-    parts[2] = int(parts[2]) + 1
+    parts[2] = str(int(parts[2]) + 1)
     version = ".".join(parts)
     package_json["version"] = version
     with open("package.json", "w") as file:
-        json.dump(package_json, file)
+        json.dump(package_json, file, indent=4)
 
 def print_version():
     with open("package.json") as file:

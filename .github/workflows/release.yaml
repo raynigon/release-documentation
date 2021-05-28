@@ -16,9 +16,7 @@ jobs:
       - id: vars
         name: "Determine Tag Name"
         run: |
-          VERSION_LINE=$(cat gradle.properties | grep "version=")
-          CURRENT_VERSION=${VERSION_LINE//version=/}
-          TAG_VERSION=v${CURRENT_VERSION//-SNAPSHOT/}
+          TAG_VERSION=$(python3 .github/release.py print)
           echo ::set-output name=tag::$TAG_VERSION
       - name: "Prepare Git"
         run: |
@@ -27,9 +25,10 @@ jobs:
           git checkout -b release
       - name: Create Release Tag
         run: |
-          .
-          .
-          .
+          git tag -a "${{ steps.vars.outputs.tag }}" -m "Release Version ${{ steps.vars.outputs.tag }}"
+          python3 .github/release.py inc
+          git add package.json
+          git commit -m "Release ${{ steps.vars.outputs.tag }} and increment version"
       - id: content
         name: Create Release Content
         uses: raynigon/release-documentation@main
