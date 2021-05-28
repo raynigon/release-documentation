@@ -35,36 +35,6 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           latest: "${{ steps.vars.outputs.tag }}"
-          template: |
-            # What's Changed
-            <!-- Features & Enhancements -->
-            {{#pull_requests.feature.length}}
-            ## 🚀 Features & Enhancements
-            {{#pull_requests.feature}}
-            * {{ title }} PR: #{{ number }}
-            {{/pull_requests.feature}}
-            {{/pull_requests.feature.length}}
-            <!-- Documentation -->
-            {{#pull_requests.documentation.length}}
-            ## 📖 Documentation
-            {{#pull_requests.documentation}}
-            * {{ title }} PR: #{{ number }}
-            {{/pull_requests.documentation}}
-            {{/pull_requests.documentation.length}}
-            <!-- Housekeeping -->
-            {{#pull_requests.housekeeping.length}}
-            ## 🧹 Housekeeping
-            {{#pull_requests.housekeeping}}
-            * {{ title }} PR: #{{ number }}
-            {{/pull_requests.housekeeping}}
-            {{/pull_requests.housekeeping.length}}
-            <!-- Dependency updates -->
-            {{#pull_requests.dependencies.length}}
-            ## 📦 Dependency updates
-            {{#pull_requests.dependencies}}
-            * {{ title }} PR: #{{ number }}
-            {{/pull_requests.dependencies}}
-            {{/pull_requests.dependencies.length}}
       - name: "Github Release"
         uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae #v1
         env:
