@@ -29,6 +29,7 @@ jobs:
           python3 .github/release.py inc
           git add package.json
           git commit -m "Release ${{ steps.vars.outputs.tag }} and increment version"
+          git push --set-upstream origin release
       - id: content
         name: Create Release Content
         uses: raynigon/release-documentation@main
