@@ -1,5 +1,8 @@
 name: 'Release Documentation'
 description: 'Create a release documentation from the repository PRs'
+branding:
+  icon: 'file-text'  
+  color: 'red'
 inputs:
   token:
     required: true
@@ -8,26 +11,38 @@ inputs:
     required: true
     description: "the latest tag for which this release documentation is meant for"
   template:  # id of input
-    description: "The ninja template which should be used to render the release documentation"
+    description: "The mustache template which should be used to render the release documentation"
     required: false
     default: |
       # What's Changed
+      <!-- Features & Enhancements -->
+      {{#pull_requests.feature.length}}
       ## 🚀 Features & Enhancements
-      {{#pull_requests.features}}
-      * {{ title }} PR: #{{ number }}
-      {{/pull_requests.features}}
+      {{#pull_requests.feature}}
+      * {{ title }}, #{{ number }} by @{{ author }}
+      {{/pull_requests.feature}}
+      {{/pull_requests.feature.length}}
+      <!-- Documentation -->
+      {{#pull_requests.documentation.length}}
       ## 📖 Documentation
       {{#pull_requests.documentation}}
-      * {{ title }} PR: #{{ number }}
+      * {{ title }}, #{{ number }} by @{{ author }}
       {{/pull_requests.documentation}}
+      {{/pull_requests.documentation.length}}
+      <!-- Housekeeping -->
+      {{#pull_requests.housekeeping.length}}
       ## 🧹 Housekeeping
       {{#pull_requests.housekeeping}}
-      * {{ title }} PR: #{{ number }}
+      * {{ title }}, #{{ number }} by @{{ author }}
       {{/pull_requests.housekeeping}}
+      {{/pull_requests.housekeeping.length}}
+      <!-- Dependency updates -->
+      {{#pull_requests.dependencies.length}}
       ## 📦 Dependency updates
       {{#pull_requests.dependencies}}
-      * {{ title }} PR: #{{ number }}
+      * {{ title }}, #{{ number }} by @{{ author }}
       {{/pull_requests.dependencies}}
+      {{/pull_requests.dependencies.length}}
 outputs:
   content:
     description: 'The parsed template filled with PRs'

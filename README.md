@@ -13,7 +13,7 @@ GitHub Action to create a release documentation from the repository PRs
 
 ### `template`
 
-The jinja template which will be rendered.
+The mustache template which will be rendered.
 
 ## Outputs
 
@@ -23,7 +23,17 @@ The rendered content.
 
 ## Example usage
 
+```
 uses: raynigon/release-documentation@main
 with:
   token: "${{ secrets.GITHUB_TOKEN }}"
   latest: "1.0.0"
+```
+could procduce something like:
+
+```
+# What's Changed
+## 🚀 Features & Enhancements
+* Automatic release, #4 by @raynigon
+```
+
