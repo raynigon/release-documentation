@@ -1,34 +1,34 @@
 {
-  "name": "release-documentation",
-  "version": "0.0.5",
-  "description": "GitHub Action to create a release documentation from the repository PRs",
-  "main": "out/index.js",
-  "scripts": {
-    "build": "npx ncc build src/index.ts -m -o out",
-    "watch": "npx ncc build src/index.ts -m -w -o out",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/raynigon/release-documentation.git"
-  },
-  "keywords": [],
-  "author": "Simon Schneider",
-  "license": "Apache 2.0",
-  "bugs": {
-    "url": "https://github.com/raynigon/release-documentation/issues"
-  },
-  "homepage": "https://github.com/raynigon/release-documentation#readme",
-  "dependencies": {
-    "@actions/core": "^1.2.7",
-    "@actions/exec": "^1.0.4",
-    "@actions/github": "^5.0.0",
-    "mustache": "^4.2.0"
-  },
-  "devDependencies": {
-    "@types/mustache": "^4.1.1",
-    "@types/node": "^15.3.0",
-    "@vercel/ncc": "^0.28.5",
-    "typescript": "^4.2.4"
-  }
+    "name": "release-documentation",
+    "version": "0.0.6",
+    "description": "GitHub Action to create a release documentation from the repository PRs",
+    "main": "out/index.js",
+    "scripts": {
+        "build": "npx ncc build src/index.ts -m -o out",
+        "watch": "npx ncc build src/index.ts -m -w -o out",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/raynigon/release-documentation.git"
+    },
+    "keywords": [],
+    "author": "Simon Schneider",
+    "license": "Apache 2.0",
+    "bugs": {
+        "url": "https://github.com/raynigon/release-documentation/issues"
+    },
+    "homepage": "https://github.com/raynigon/release-documentation#readme",
+    "dependencies": {
+        "@actions/core": "^1.2.7",
+        "@actions/exec": "^1.0.4",
+        "@actions/github": "^5.0.0",
+        "mustache": "^4.2.0"
+    },
+    "devDependencies": {
+        "@types/mustache": "^4.1.1",
+        "@types/node": "^15.3.0",
+        "@vercel/ncc": "^0.28.5",
+        "typescript": "^4.2.4"
+    }
 }
