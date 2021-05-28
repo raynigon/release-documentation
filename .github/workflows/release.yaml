@@ -30,6 +30,11 @@ jobs:
           git add package.json
           git commit -m "Release ${{ steps.vars.outputs.tag }} and increment version"
           git push --follow-tags --set-upstream origin release
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "main"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - id: content
         name: Create Release Content
         uses: raynigon/release-documentation@main
