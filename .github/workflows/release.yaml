@@ -1,0 +1,75 @@
+name: CD - Release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Build Release"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - id: vars
+        name: "Determine Tag Name"
+        run: |
+          TAG_VERSION=$(python3 .github/release.py print)
+          echo ::set-output name=tag::$TAG_VERSION
+      - name: "Prepare Git"
+        run: |
+          git config --global user.email "84719472+raynigon-bot@users.noreply.github.com"
+          git config --global user.name "raynigon[bot]"
+          git checkout -b release
+      - name: Create Release Tag
+        run: |
+          git tag -a "${{ steps.vars.outputs.tag }}" -m "Release Version ${{ steps.vars.outputs.tag }}"
+          python3 .github/release.py inc
+          git add package.json
+          git commit -m "Release ${{ steps.vars.outputs.tag }} and increment version"
+      - id: content
+        name: Create Release Content
+        uses: raynigon/release-documentation@main
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          latest: "${{ steps.vars.outputs.tag }}"
+          template: |
+            # What's Changed
+            <!-- Features & Enhancements -->
+            {{#pull_requests.feature.length}}
+            ## 🚀 Features & Enhancements
+            {{#pull_requests.feature}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.feature}}
+            {{/pull_requests.feature.length}}
+            <!-- Documentation -->
+            {{#pull_requests.documentation.length}}
+            ## 📖 Documentation
+            {{#pull_requests.documentation}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.documentation}}
+            {{/pull_requests.documentation.length}}
+            <!-- Housekeeping -->
+            {{#pull_requests.housekeeping.length}}
+            ## 🧹 Housekeeping
+            {{#pull_requests.housekeeping}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.housekeeping}}
+            {{/pull_requests.housekeeping.length}}
+            <!-- Dependency updates -->
+            {{#pull_requests.dependencies.length}}
+            ## 📦 Dependency updates
+            {{#pull_requests.dependencies}}
+            * {{ title }} PR: #{{ number }}
+            {{/pull_requests.dependencies}}
+            {{/pull_requests.dependencies.length}}
+      - name: "Github Release"
+        uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae #v1
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          tag_name: "${{ steps.vars.outputs.tag }}"
+          name: "${{ steps.vars.outputs.tag }}"
+          body: ${{ steps.content.outputs.content }}
