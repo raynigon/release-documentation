@@ -19,28 +19,28 @@ inputs:
       {{#pull_requests.feature.length}}
       ## 🚀 Features & Enhancements
       {{#pull_requests.feature}}
-      * {{ title }}, #{{ number }} by @{{ author }}
+      * {{ title }}, #{{ number }}
       {{/pull_requests.feature}}
       {{/pull_requests.feature.length}}
       <!-- Documentation -->
       {{#pull_requests.documentation.length}}
       ## 📖 Documentation
       {{#pull_requests.documentation}}
-      * {{ title }}, #{{ number }} by @{{ author }}
+      * {{ title }}, #{{ number }}
       {{/pull_requests.documentation}}
       {{/pull_requests.documentation.length}}
       <!-- Housekeeping -->
       {{#pull_requests.housekeeping.length}}
       ## 🧹 Housekeeping
       {{#pull_requests.housekeeping}}
-      * {{ title }}, #{{ number }} by @{{ author }}
+      * {{ title }}, #{{ number }}
       {{/pull_requests.housekeeping}}
       {{/pull_requests.housekeeping.length}}
       <!-- Dependency updates -->
       {{#pull_requests.dependencies.length}}
       ## 📦 Dependency updates
       {{#pull_requests.dependencies}}
-      * {{ title }}, #{{ number }} by @{{ author }}
+      * {{ title }}, #{{ number }}
       {{/pull_requests.dependencies}}
       {{/pull_requests.dependencies.length}}
 outputs:
