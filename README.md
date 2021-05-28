@@ -23,6 +23,7 @@ The rendered content.
 
 ## Example usage
 
+### Simple Usage
 ```
 uses: raynigon/release-documentation@main
 with:
@@ -34,6 +35,68 @@ could procduce something like:
 ```
 # What's Changed
 ## 🚀 Features & Enhancements
-* Automatic release, #4 by @raynigon
+* Automatic release, #4
 ```
 
+### Advanced Usage
+
+The mustache syntax can be used in the template.
+Following properties are available:
+* **pull_requests**: Map of pull Request
+  * **_all**: All Pull Requests which were found
+  * **_no_label**: All Pull Requests without a label
+  * **`label`**: All Pull Requests which contain the given label
+
+Every pull request has following properties on its own:
+* **id**: Global GitHub Pull Request id
+* **number**: Number of the Pull Request in this repository
+* **title**: Title of the Pull Request
+* **author**: Author of the Pull Request
+* **labels**: List of labels of this Pull Request
+
+```
+- id: content
+  name: Create Release Content
+  uses: raynigon/release-documentation@0.0.7
+  with:
+    token: "${{ secrets.BOT_ACCESS_TOKEN }}"
+    latest: "1.2.3"
+    template: |
+      # What's Changed
+      <!-- Features & Enhancements -->
+      {{#pull_requests.feature.length}}
+      ## 🚀 Features & Enhancements
+      {{#pull_requests.feature}}
+      * {{ title }} PR: #{{ number }} by {{ author }}
+      {{/pull_requests.feature}}
+      {{/pull_requests.feature.length}}
+      <!-- Documentation -->
+      {{#pull_requests.documentation.length}}
+      ## 📖 Documentation
+      {{#pull_requests.documentation}}
+      * {{ title }} PR: #{{ number }} by {{ author }}
+      {{/pull_requests.documentation}}
+      {{/pull_requests.documentation.length}}
+      <!-- Housekeeping -->
+      {{#pull_requests.housekeeping.length}}
+      ## 🧹 Housekeeping
+      {{#pull_requests.housekeeping}}
+      * {{ title }} PR: #{{ number }} by {{ author }}
+      {{/pull_requests.housekeeping}}
+      {{/pull_requests.housekeeping.length}}
+      <!-- Dependency updates -->
+      {{#pull_requests.dependencies.length}}
+      ## 📦 Dependency updates
+      {{#pull_requests.dependencies}}
+      * {{ title }} PR: #{{ number }} by {{ author }}
+      {{/pull_requests.dependencies}}
+      {{/pull_requests.dependencies.length}}
+- name: "Github Release"
+  uses: softprops/action-gh-release@v1
+  env:
+    GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  with:
+    tag_name: "1.2.3"
+    name: "1.2.3"
+    body: ${{ steps.content.outputs.content }}
+```
