@@ -16,11 +16,11 @@ inputs:
     default: |
       # What's Changed
       <!-- Features & Enhancements -->
-      {{#pull_requests.feature.length}}
+      {{#pull_requests.enhancement.length}}
       ## 🚀 Features & Enhancements
-      {{#pull_requests.feature}}
+      {{#pull_requests.enhancement}}
       * {{ title }}, #{{ number }}
-      {{/pull_requests.feature}}
+      {{/pull_requests.enhancement}}
       {{/pull_requests.feature.length}}
       <!-- Documentation -->
       {{#pull_requests.documentation.length}}
