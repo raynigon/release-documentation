@@ -42,12 +42,12 @@ jobs:
         uses: raynigon/release-documentation@main
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          latest: "${{ steps.vars.outputs.tag }}"
+          latest: "v${{ steps.vars.outputs.tag }}"
       - name: "Github Release"
         uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae #v1
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          tag_name: "${{ steps.vars.outputs.tag }}"
+          tag_name: "v${{ steps.vars.outputs.tag }}"
           name: "${{ steps.vars.outputs.tag }}"
           body: ${{ steps.content.outputs.content }}
