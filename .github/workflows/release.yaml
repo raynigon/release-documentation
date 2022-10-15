@@ -25,7 +25,7 @@ jobs:
           git checkout -b release
       - name: Create Release Tag
         run: |
-          git tag -a "${{ steps.vars.outputs.tag }}" -m "Release Version ${{ steps.vars.outputs.tag }}"
+          git tag -a "v${{ steps.vars.outputs.tag }}" -m "Release Version v${{ steps.vars.outputs.tag }}"
           python3 .github/release.py inc
           git add package.json
           git commit -m "Release ${{ steps.vars.outputs.tag }} and increment version"
