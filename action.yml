@@ -21,7 +21,7 @@ inputs:
       {{#pull_requests.enhancement}}
       * {{ title }}, #{{ number }}
       {{/pull_requests.enhancement}}
-      {{/pull_requests.feature.length}}
+      {{/pull_requests.enhancement.length}}
       <!-- Documentation -->
       {{#pull_requests.documentation.length}}
       ## 📖 Documentation
