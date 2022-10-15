@@ -64,12 +64,12 @@ Every pull request has following properties on its own:
     template: |
       # What's Changed
       <!-- Features & Enhancements -->
-      {{#pull_requests.feature.length}}
+      {{#pull_requests.enhancement.length}}
       ## 🚀 Features & Enhancements
-      {{#pull_requests.feature}}
+      {{#pull_requests.enhancement}}
       * {{ title }} PR: #{{ number }} by {{ author }}
-      {{/pull_requests.feature}}
-      {{/pull_requests.feature.length}}
+      {{/pull_requests.enhancement}}
+      {{/pull_requests.enhancement.length}}
       <!-- Documentation -->
       {{#pull_requests.documentation.length}}
       ## 📖 Documentation
