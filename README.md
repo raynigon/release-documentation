@@ -15,6 +15,10 @@ GitHub Action to create a release documentation from the repository PRs
 
 The mustache template which will be rendered.
 
+### `templateFile`
+
+The path to a file in the repository, which will be used to render the release content.
+
 ## Outputs
 
 ### `content`
