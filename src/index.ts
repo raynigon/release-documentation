@@ -2,6 +2,14 @@ import * as core from '@actions/core';
 import { exec, ExecOptions } from '@actions/exec';
 import { createTemplateContext } from './pull_requests';
 import Mustache from 'mustache';
+import { constants } from 'fs';
+import { readFile, access } from 'fs/promises';
+
+function checkFileExists(filepath: string): Promise<boolean>{
+    return access(filepath, constants.F_OK)
+    .then(() => true)
+    .catch(() => false)
+  }  
 
 interface ExecReturnOptions {
     stdout(): string
@@ -64,18 +72,34 @@ function renderTemplate(template: string, context: any): string {
     return Mustache.render(template, context);
 }
 
+async function getTemplate(template: string, templateFile: string): Promise<string> {
+    if (!templateFile){
+        core.debug("Use template content from variable instead of file")
+        return template
+    }
+    const fileExists = checkFileExists(templateFile)
+    if (!fileExists){
+        core.info(`Template file does not exist: ${templateFile}`)
+        return template
+    }
+    return await readFile(templateFile, { encoding: 'utf8' })
+}
+
 async function main() {
     // Input
     const token = core.getInput('token');
     const latestTag = core.getInput('latest');
     const template = core.getInput('template');
+    const templateFile = core.getInput('templateFile');
+    // Template Content
+    const templateContent = await getTemplate(template, templateFile)
     // Calculated Values
     const previousTag = await getPreviousTag(latestTag);
     const prIds = await listPRs(previousTag, latestTag);
     const context = await createTemplateContext(token, prIds);
     // Parse Template
     core.debug("Render Template")
-    const content: string = renderTemplate(template, context);
+    const content: string = renderTemplate(templateContent, context);
     core.setOutput("content", content);
     return null;
 }
