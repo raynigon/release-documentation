@@ -29,10 +29,10 @@ The rendered content.
 
 ### Simple Usage
 ```
-uses: raynigon/release-documentation@v1.0.0
+uses: raynigon/release-documentation@v1.0.1
 with:
   token: "${{ secrets.GITHUB_TOKEN }}"
-  latest: "1.0.0"
+  latest: "1.0.1"
 ```
 could procduce something like:
 
@@ -61,7 +61,7 @@ Every pull request has following properties on its own:
 ```
 - id: content
   name: Create Release Content
-  uses: raynigon/release-documentation@v1.0.0
+  uses: raynigon/release-documentation@v1.0.1
   with:
     token: "${{ secrets.BOT_ACCESS_TOKEN }}"
     latest: "1.2.3"
