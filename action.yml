@@ -50,5 +50,5 @@ outputs:
   content:
     description: 'The parsed template filled with PRs'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'out/index.js'
