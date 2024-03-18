@@ -44,7 +44,7 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
           latest: "v${{ steps.vars.outputs.tag }}"
       - name: "Github Release"
-        uses: softprops/action-gh-release@1ce812a7bd7fa6c191ed3334eeace31579a98f25 #v1
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 #v1
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
