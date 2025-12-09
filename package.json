@@ -21,7 +21,7 @@
     "homepage": "https://github.com/raynigon/release-documentation#readme",
     "dependencies": {
         "@actions/core": "^1.11.1",
-        "@actions/exec": "^1.0.4",
+        "@actions/exec": "^2.0.0",
         "@actions/github": "^6.0.1",
         "mustache": "^4.2.0"
     },
